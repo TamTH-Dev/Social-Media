@@ -4,6 +4,9 @@ const env = require('dotenv')
 const morgan = require('morgan')
 const helmet = require('helmet')
 
+const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/users')
+
 const app = express()
 
 env.config()
@@ -26,6 +29,9 @@ app.use(morgan('common'))
 app.get('/', (req, res) => {
   res.send('Hello world')
 })
+
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
