@@ -6,6 +6,7 @@ const helmet = require('helmet')
 
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/users')
+const postRoutes = require('./routes/posts')
 
 const app = express()
 
@@ -26,12 +27,10 @@ app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
 
-app.get('/', (req, res) => {
-  res.send('Hello world')
-})
-
+// API
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/posts', postRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
