@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const env = require('dotenv')
 const morgan = require('morgan')
 const helmet = require('helmet')
+const cors = require('cors')
 
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/users')
@@ -20,6 +21,14 @@ mongoose.connect(
   () => {
     console.log('Connected to Atlas successfully!')
   }
+)
+
+// Cors configuration
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
 )
 
 // Middleware

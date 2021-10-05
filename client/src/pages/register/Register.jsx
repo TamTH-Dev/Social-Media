@@ -1,6 +1,40 @@
+import { useRef, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
+import { CircularProgress } from '@material-ui/core'
+
+import apiService from '../../helpers/apiService'
+import { AuthContext } from '../../context/AuthContext'
+
 import './register.css'
 
 const Register = () => {
+  const username = useRef()
+  const email = useRef()
+  const password = useRef()
+  const passwordAgain = useRef()
+  const { user, isFetching } = useContext(AuthContext)
+  const history = useHistory()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (passwordAgain.current.value !== password.current.value) {
+      passwordAgain.current.setCustomValidity('Password does not match')
+      return
+    }
+    const user = {
+      username: username.current.value,
+      email: email.current.value,
+      password: password.current.value,
+    }
+    try {
+      await apiService.post('auth/register', user)
+      history.push('/login')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  console.log(user)
   return (
     <div className="login">
       <div className="loginWrapper">
@@ -11,16 +45,46 @@ const Register = () => {
           </span>
         </div>
         <div className="loginRight">
-          <div className="loginBox">
-            <input placeholder="Username" className="loginInput" />
-            <input placeholder="Email" className="loginInput" />
-            <input placeholder="Password" className="loginInput" />
-            <input placeholder="Password Again" className="loginInput" />
-            <button className="loginButton">Sign Up</button>
-            <button className="loginRegisterButton">
-              Log into Account
+          <form className="loginBox" onSubmit={handleSubmit}>
+            <input
+              required
+              ref={username}
+              type="text"
+              placeholder="Username"
+              className="loginInput"
+            />
+            <input
+              required
+              ref={email}
+              type="email"
+              placeholder="Email"
+              className="loginInput"
+            />
+            <input
+              required
+              ref={password}
+              type="password"
+              placeholder="Password"
+              className="loginInput"
+              minLength="6"
+            />
+            <input
+              required
+              ref={passwordAgain}
+              type="password"
+              placeholder="Password Again"
+              className="loginInput"
+              minLength="6"
+            />
+            <button className="loginButton" disabled={isFetching}>
+              {isFetching ? (
+                <CircularProgress color="inherit" size="20px" />
+              ) : (
+                'Sign Up'
+              )}
             </button>
-          </div>
+            <button className="loginRegisterButton">Log into Account</button>
+          </form>
         </div>
       </div>
     </div>

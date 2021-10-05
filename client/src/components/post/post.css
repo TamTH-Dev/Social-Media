@@ -21,6 +21,11 @@
   align-items: center;
 }
 
+.postTopLeftLink {
+  display: flex;
+  align-items: center;
+}
+
 .postProfileImg {
   width: 32px;
   height: 32px;

@@ -55,6 +55,7 @@
   height: 50px;
   border-radius: 10px;
   border: none;
+  outline: none;
   background-color: #1775ee;
   color: white;
   font-size: 20px;
