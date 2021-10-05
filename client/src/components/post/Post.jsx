@@ -11,8 +11,8 @@ const Post = ({ post }) => {
   const user = Users.filter((user) => user.id === post.userId)[0]
 
   const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1)
-    setIsLiked(!isLiked)
+    setLike(like => isLiked ? like - 1 : like + 1)
+    setIsLiked(isLiked => !isLiked)
   }
 
   return (
@@ -23,7 +23,7 @@ const Post = ({ post }) => {
             <img
               className="postProfileImg"
               src={user.profilePicture}
-              alt="Profile image"
+              alt=""
             />
             <span className="postUsername">{user.username}</span>
             <span className="postDate">{post.date}</span>
