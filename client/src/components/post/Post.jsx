@@ -9,7 +9,7 @@ import { AuthContext } from '../../context/AuthContext'
 import './post.css'
 
 const Post = ({ post, isProfilePage }) => {
-  const [like, setLike] = useState(post.likes.length)
+  const [like, setLike] = useState(post && post.likes && post.likes.length)
   const [isLiked, setIsLiked] = useState(false)
   const [user, setUser] = useState({})
   const { user: currentUser } = useContext(AuthContext)
@@ -24,11 +24,13 @@ const Post = ({ post, isProfilePage }) => {
         console.error(error)
       }
     }
-    fetchUser()
+    if (post?.userId) {
+      fetchUser()
+    }
   }, [post.userId])
 
   useEffect(() => {
-    setIsLiked(post.likes.includes(currentUser._id))
+    setIsLiked(post?.likes && post.likes.includes(currentUser._id))
   }, [post.likes, currentUser._id])
 
   const likeHandler = async () => {

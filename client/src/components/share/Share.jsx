@@ -1,5 +1,11 @@
 import { useContext, useRef, useState } from 'react'
-import { PermMedia, Label, Room, EmojiEmotions } from '@material-ui/icons'
+import {
+  PermMedia,
+  Label,
+  Room,
+  EmojiEmotions,
+  Cancel,
+} from '@material-ui/icons'
 
 import apiService from '../../helpers/apiService'
 import { AuthContext } from '../../context/AuthContext'
@@ -23,20 +29,20 @@ const Share = () => {
       const filename = `${Date.now()}_${file.name}`
       data.append('name', filename)
       data.append('file', file)
-      newPost.img = filename
+      newPost.img = `post/${filename}`
       try {
         await apiService.post('upload', data)
-        window.location.reload()
       } catch (error) {
         console.error(error)
       }
     }
 
     try {
-      await apiService.post('posts', newPost) 
+      await apiService.post('posts', newPost)
     } catch (error) {
       console.error(error)
     }
+    window.location.reload()
   }
 
   return (
@@ -59,6 +65,12 @@ const Share = () => {
           />
         </div>
         <hr className="shareHr" />
+        {file && (
+          <div className="shareImgContainer">
+            <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
+            <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
+          </div>
+        )}
         <form className="shareBottom" onSubmit={handleSubmit}>
           <div className="shareOptions">
             <label htmlFor="file" className="shareOption">
@@ -85,7 +97,9 @@ const Share = () => {
               <span className="shareOptionText">Feelings</span>
             </div>
           </div>
-          <button className="shareButton" type="submit">Share</button>
+          <button className="shareButton" type="submit">
+            Share
+          </button>
         </form>
       </div>
     </div>

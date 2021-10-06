@@ -22,16 +22,19 @@ const Feed = ({ username }) => {
         console.log(error)
       }
     }
-    fetchPosts()
+    if (username || user?._id) {
+      fetchPosts()
+    }
   }, [username, user._id])
 
   return (
     <div className="feed">
       <div className="feedWrapper">
-        {user.username === username && <Share />}
-        {posts.map((post) => (
-          <Post key={post._id} isProfilePage={!!username} post={post} />
-        ))}
+        {(!username || user?.username === username) && <Share />}
+        {posts?.length > 0 &&
+          posts.map((post) => (
+            <Post key={post._id} isProfilePage={!!username} post={post} />
+          ))}
       </div>
     </div>
   )

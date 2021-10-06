@@ -1,4 +1,10 @@
-import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE } from '../helpers/constants'
+import {
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  FOLLOW,
+  UNFOLLOW,
+} from '../helpers/constants'
 
 const AuthReducer = (state, action) => {
   switch (action.type) {
@@ -21,6 +27,26 @@ const AuthReducer = (state, action) => {
         user: null,
         isFetching: false,
         error: action.payload,
+      }
+    }
+    case FOLLOW: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: [...state.user.followings, action.payload],
+        },
+      }
+    }
+    case UNFOLLOW: {
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          followings: state.user.followings.filter(
+            (following) => following !== action.payload
+          ),
+        },
       }
     }
     default: {

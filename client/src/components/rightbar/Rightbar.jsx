@@ -1,29 +1,57 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Add } from '@material-ui/icons'
 
 import apiService from '../../helpers/apiService'
+import { AuthContext } from '../../context/AuthContext'
+import { Follow, Unfollow } from '../../context/AuthActions'
 import Online from '../../components/online/Online'
 import { Users } from '../../dummyData'
+
 import './rightbar.css'
-import { Link } from 'react-router-dom'
 
 const Rightbar = ({ user }) => {
+  const { user: currentUser, dispatch } = useContext(AuthContext)
   const [friends, setFriends] = useState([])
+  const [followed, setFollowed] = useState(
+    currentUser.followings.includes(user?._id)
+  )
   const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const res = await apiService.get(`users/friends/${user._id}`)
-        console.log(res.data)
         setFriends(res.data.friends)
       } catch (error) {
         console.error(error)
       }
     }
-    if (user && user._id) {
+    if (user?._id) {
       fetchFriends()
     }
-  }, [user, user._id])
+  }, [user])
+
+  const handleClick = async () => {
+    try {
+      const userId = user._id
+      const currentUserId = currentUser._id
+      if (followed) {
+        await apiService.put(`users/${userId}/unfollow`, {
+          userId: currentUserId,
+        })
+        dispatch(Follow(userId))
+      } else {
+        await apiService.put(`users/${userId}/follow`, {
+          userId: currentUserId,
+        })
+        dispatch(Unfollow(userId))
+      }
+      setFollowed((followed) => !followed)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const HomeRightbar = () => (
     <>
@@ -45,6 +73,18 @@ const Rightbar = ({ user }) => {
 
   const ProfileRightbar = () => (
     <>
+      {user.username !== currentUser.username && (
+        <button className="rightbarFollowButton" onClick={handleClick}>
+          {followed ? (
+            <span>Unfollow</span>
+          ) : (
+            <>
+              <Add />
+              <span>Follow</span>
+            </>
+          )}
+        </button>
+      )}
       <h4 className="rightbarTitle">User information</h4>
       <div className="rightbarInfo">
         <div className="rightbarInfoItem">
@@ -68,14 +108,14 @@ const Rightbar = ({ user }) => {
       </div>
       <h4 className="rightbarTitle">User friends</h4>
       <div className="rightbarFollowings">
-        {friends &&
-          friends.length > 0 &&
+        {friends?.length > 0 &&
           friends.map((friend) => (
             <Link
+              key={friend._id}
               style={{ textDecoration: 'none', color: '#333' }}
               to={`/profile/${friend.username}`}
             >
-              <div key={friend._id} className="rightbarFollowing">
+              <div className="rightbarFollowing">
                 <img
                   className="rightbarFollowingImg"
                   src={

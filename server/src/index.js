@@ -44,7 +44,7 @@ app.use(morgan('common'))
 // File handler
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, path.join(__dirname, '..', 'public/images'))
+    cb(null, path.join(__dirname, '..', 'public/images/post'))
   },
   filename: (req, _, cb) => {
     cb(null, req.body.name)

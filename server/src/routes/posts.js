@@ -71,7 +71,10 @@ router.get('/timeline/:userId', async (req, res) => {
         Post.find({ userId: friendId }).sort({ createdAt: -1 })
       )
     )
-    res.status(200).json({ posts: [...userPosts, ...friendPosts] })
+    if (friendPosts[0]) {
+      return res.status(200).json({ posts: [...userPosts, ...friendPosts[0]] })
+    }
+    res.status(200).json({ posts: userPosts })
   } catch (error) {
     console.log(error)
     res.status(500).json({ error })

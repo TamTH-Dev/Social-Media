@@ -1,4 +1,4 @@
-import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE } from '../helpers/constants'
+import { LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE, FOLLOW, UNFOLLOW } from '../helpers/constants'
 
 export const LoginStart = () => ({
   type: LOGIN_START,
@@ -12,4 +12,14 @@ export const LoginSuccess = (user) => ({
 export const LoginFailure = (error) => ({
   type: LOGIN_FAILURE,
   payload: error,
+})
+
+export const Follow = (userId) => ({
+  type: FOLLOW,
+  payload: userId,
+})
+
+export const Unfollow = (userId) => ({
+  type: UNFOLLOW,
+  payload: userId,
 })

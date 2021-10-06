@@ -1,9 +1,8 @@
-import { useRef, useContext } from 'react'
+import { useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
 
 import apiService from '../../helpers/apiService'
-import { AuthContext } from '../../context/AuthContext'
 
 import './register.css'
 
@@ -12,7 +11,6 @@ const Register = () => {
   const email = useRef()
   const password = useRef()
   const passwordAgain = useRef()
-  const { user, isFetching } = useContext(AuthContext)
   const history = useHistory()
 
   const handleSubmit = async (e) => {
@@ -34,7 +32,6 @@ const Register = () => {
     }
   }
 
-  console.log(user)
   return (
     <div className="login">
       <div className="loginWrapper">

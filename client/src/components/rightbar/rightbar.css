@@ -86,3 +86,18 @@
   text-align: center;
   margin-top: 6px;
 }
+
+.rightbarFollowButton {
+  margin-bottom: 30px;
+  border: none;
+  outline: none;
+  background-color: #1872f2;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
