@@ -22,7 +22,7 @@ router.put('/:id', async (req, res) => {
       return res.status(403).json({ message: 'You can update only your post' })
     }
     await post.updateOne({ $set: req.body })
-    res.status(200).json({ message: 'The post has been updated' })
+    res.status(204).json({ message: 'The post has been updated' })
   } catch (error) {
     res.status(500).json({ error })
   }
@@ -36,7 +36,7 @@ router.delete('/:id', async (req, res) => {
       return res.status(403).json({ message: 'You can delete only your post' })
     }
     await post.deleteOne()
-    res.status(200).json({ message: 'The post has been deleted' })
+    res.status(204).json({ message: 'The post has been deleted' })
   } catch (error) {
     res.status(500).json({ error })
   }
@@ -53,7 +53,7 @@ router.put('/:id/react', async (req, res) => {
       return res.status(200).json({ message: 'The post has been disliked' })
     }
     await post.updateOne({ $push: { likes: userId } })
-    res.status(200).json({ message: 'The post has been liked' })
+    res.status(204).json({ message: 'The post has been liked' })
   } catch (error) {
     res.status(500).json({ error })
   }
@@ -63,9 +63,13 @@ router.put('/:id/react', async (req, res) => {
 router.get('/timeline/:userId', async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.userId)
-    const userPosts = await Post.find({ userId: currentUser._id })
+    const userPosts = await Post.find({ userId: currentUser._id }).sort({
+      createdAt: -1,
+    })
     const friendPosts = await Promise.all(
-      currentUser.followings.map((friendId) => Post.find({ userId: friendId }))
+      currentUser.followings.map((friendId) =>
+        Post.find({ userId: friendId }).sort({ createdAt: -1 })
+      )
     )
     res.status(200).json({ posts: [...userPosts, ...friendPosts] })
   } catch (error) {
@@ -79,7 +83,7 @@ router.get('/profile/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username })
     if (!user) return res.status(400).json({ message: 'User does not exist' })
-    const posts = await Post.find({ userId: user._id })
+    const posts = await Post.find({ userId: user._id }).sort({ createdAt: -1 })
     res.status(200).json({ posts })
   } catch (error) {
     console.log(error)

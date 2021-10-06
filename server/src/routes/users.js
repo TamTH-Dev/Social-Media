@@ -55,6 +55,19 @@ router.get('/', async (req, res) => {
   }
 })
 
+// Get friends
+router.get('/friends/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).populate({
+      path: 'followings',
+      select: '_id username profilePicture',
+    })
+    res.status(200).json({ friends: user.followings })
+  } catch (error) {
+    res.status(500).json({ error })
+  }
+})
+
 // Follow user
 router.put('/:id/follow', async (req, res) => {
   if (req.body.userId === req.params.id) {

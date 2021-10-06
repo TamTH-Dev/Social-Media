@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema(
     },
     followings: {
       type: Array,
+      ref: 'User',
       default: [],
     },
     isAdmin: {

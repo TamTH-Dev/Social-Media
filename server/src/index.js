@@ -4,6 +4,8 @@ const env = require('dotenv')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const cors = require('cors')
+const multer = require('multer')
+const path = require('path')
 
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/users')
@@ -31,10 +33,31 @@ app.use(
   })
 )
 
+// Public
+app.use('/images', express.static(path.join(__dirname, '..', 'public/images')))
+
 // Middleware
 app.use(express.json())
 app.use(helmet())
 app.use(morgan('common'))
+
+// File handler
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, path.join(__dirname, '..', 'public/images'))
+  },
+  filename: (req, _, cb) => {
+    cb(null, req.body.name)
+  },
+})
+const upload = multer({ storage })
+app.post('/api/upload', upload.single('file'), (_, res) => {
+  try {
+    res.status(200).json({ message: 'File uploaded successfully' })
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 // API
 app.use('/api/auth', authRoutes)
