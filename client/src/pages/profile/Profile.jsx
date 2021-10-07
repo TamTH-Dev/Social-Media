@@ -20,7 +20,7 @@ const Profile = () => {
         const res = await apiService.get(`users?username=${username}`)
         setUser(res.data.user)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
     if (username) {

@@ -6,6 +6,7 @@ export const loginCall = async (userCrendential, dispatch) => {
   try {
     const res = await apiService.post('auth/login', userCrendential)
     dispatch(LoginSuccess(res.data.user))
+    localStorage.setItem('social_user', JSON.stringify(res.data.user))
   } catch (error) {
     dispatch(LoginFailure(error))
   }

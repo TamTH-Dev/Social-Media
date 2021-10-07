@@ -28,7 +28,7 @@ const Register = () => {
       await apiService.post('auth/register', user)
       history.push('/login')
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

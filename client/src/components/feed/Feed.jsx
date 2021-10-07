@@ -19,7 +19,7 @@ const Feed = ({ username }) => {
           : await apiService.get(`posts/timeline/${user._id}`)
         setPosts(res.data.posts)
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     }
     if (username || user?._id) {

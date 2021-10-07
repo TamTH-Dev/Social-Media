@@ -10,6 +10,8 @@ const path = require('path')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/users')
 const postRoutes = require('./routes/posts')
+const conversationRoutes = require('./routes/conversations')
+const messageRoutes = require('./routes/messages')
 
 const app = express()
 
@@ -63,6 +65,8 @@ app.post('/api/upload', upload.single('file'), (_, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
+app.use('/api/conversations', conversationRoutes)
+app.use('/api/messages', messageRoutes)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
